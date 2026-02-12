@@ -1,10 +1,8 @@
-# Alicloud Comprehensive Real-Time Monitoring Terraform Module
+Alicloud Comprehensive Real-Time Monitoring Terraform Module
 
-================================================ 
+# terraform-alicloud-prometheus-cloud-monitoring
 
-# terraform-alicloud-comprehensive-monitoring
-
-English | [简体中文](https://github.com/alibabacloud-automation/terraform-alicloud-comprehensive-monitoring/blob/main/README-CN.md)
+English | [简体中文](https://github.com/alibabacloud-automation/terraform-alicloud-prometheus-cloud-monitoring/blob/main/README-CN.md)
 
 Terraform module which creates a comprehensive real-time monitoring solution through Managed Service for Prometheus on Alibaba Cloud. This module provisions a complete monitoring infrastructure including VPC, ECS, RDS, Redis, RocketMQ, and MSE services with integrated monitoring and logging capabilities for cloud-native applications. This solution enables enterprises to implement [comprehensive real-time monitoring of cloud services through managed service for Prometheus](https://www.aliyun.com/solution/tech-solution/comprehensive-real-time-monitoring-of-cloud-services-through-managed-service-for-prometheus), providing unified observability across distributed systems.
 
@@ -22,10 +20,7 @@ This module creates a complete cloud services monitoring solution with the follo
 
 ```terraform
 module "monitoring_solution" {
-  source = "alibabacloud-automation/comprehensive-monitoring/alicloud"
-
-  common_name = "monitoring-prod"
-  region      = "cn-hangzhou"
+  source = "alibabacloud-automation/prometheus-cloud-monitoring/alicloud"
 
   vpc_config = {
     cidr_block = "192.168.0.0/16"
@@ -48,27 +43,21 @@ module "monitoring_solution" {
   }
 
   instance_config = {
-    image_id             = "aliyun_3_x64_20G_alibase_20240819.vhd"
-    instance_type        = "ecs.t6-c1m2.large"
-    system_disk_category = "cloud_essd"
-    password             = "YourSecurePassword123!"
-    vswitch_key          = "ecs_vswitch"
+    image_id = "aliyun_3_x64_20G_alibase_20240819.vhd"
+    password = "YourSecurePassword123!"
+    # instance_type, system_disk_category, internet_max_bandwidth_out, and vswitch_key use defaults
   }
 
   rds_account_config = {
-    account_type     = "Normal"
     account_name     = "monitoring_user"
     account_password = "YourDBPassword123!"
+    # account_type uses default "Normal"
   }
 
+
   redis_instance_config = {
-    engine_version = "7.0"
-    zone_id        = "cn-hangzhou-j"
-    instance_class = "redis.shard.small.2.ce"
-    password       = "YourRedisPassword123!"
-    shard_count    = 1
-    security_ips   = ["192.168.0.0/16"]
-    vswitch_key    = "redis_vswitch"
+    password = "YourRedisPassword123!"
+    # engine_version, instance_class, shard_count, db_instance_name, security_ips, and vswitch_key use defaults
   }
 
   rocketmq_account_config = {
@@ -84,8 +73,7 @@ module "monitoring_solution" {
 
 ## Examples
 
-* [Complete Example](https://github.com/alibabacloud-automation/terraform-alicloud-comprehensive-monitoring/tree/main/examples/complete)
-* [Basic Example](https://github.com/alibabacloud-automation/terraform-alicloud-comprehensive-monitoring/tree/main/examples/basic)
+* [Complete Example](https://github.com/alibabacloud-automation/terraform-alicloud-prometheus-cloud-monitoring/tree/main/examples/complete)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

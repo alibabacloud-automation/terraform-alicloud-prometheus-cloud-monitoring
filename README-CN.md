@@ -1,8 +1,8 @@
 阿里云综合实时监控 Terraform 模块
 
-# terraform-alicloud-comprehensive-monitoring
+# terraform-alicloud-prometheus-cloud-monitoring
 
-[English](https://github.com/alibabacloud-automation/terraform-alicloud-comprehensive-monitoring/blob/main/README.md) | 简体中文
+[English](https://github.com/alibabacloud-automation/terraform-alicloud-prometheus-cloud-monitoring/blob/main/README.md) | 简体中文
 
 通过阿里云 Prometheus 托管服务创建综合实时监控解决方案的 Terraform 模块。该模块提供完整的监控基础设施，包括 VPC、ECS、RDS、Redis、RocketMQ 和 MSE 服务，并集成监控和日志功能，专为云原生应用程序设计。该解决方案帮助企业实现[通过 Prometheus 托管服务进行云服务综合实时监控](https://www.aliyun.com/solution/tech-solution/comprehensive-real-time-monitoring-of-cloud-services-through-managed-service-for-prometheus)，为分布式系统提供统一的可观测性。
 
@@ -10,11 +10,12 @@
 
 
 ```terraform
-module "monitoring_solution" {
-  source = "alibabacloud-automation/comprehensive-monitoring/alicloud"
+provider "alicloud" {
+  region = "cn-hangzhou"
+}
 
-  common_name = "monitoring-prod"
-  region      = "cn-hangzhou"
+module "monitoring_solution" {
+  source = "alibabacloud-automation/prometheus-cloud-monitoring/alicloud"
 
   vpc_config = {
     cidr_block = "192.168.0.0/16"
@@ -37,27 +38,20 @@ module "monitoring_solution" {
   }
 
   instance_config = {
-    image_id             = "aliyun_3_x64_20G_alibase_20240819.vhd"
-    instance_type        = "ecs.t6-c1m2.large"
-    system_disk_category = "cloud_essd"
-    password             = "YourSecurePassword123!"
-    vswitch_key          = "ecs_vswitch"
+    image_id = "aliyun_3_x64_20G_alibase_20240819.vhd"
+    password = "YourSecurePassword123!"
+    # instance_type, system_disk_category, internet_max_bandwidth_out, and vswitch_key use defaults
   }
 
   rds_account_config = {
-    account_type     = "Normal"
     account_name     = "monitoring_user"
     account_password = "YourDBPassword123!"
+    # account_type uses default "Normal"
   }
 
   redis_instance_config = {
-    engine_version = "7.0"
-    zone_id        = "cn-hangzhou-j"
-    instance_class = "redis.shard.small.2.ce"
-    password       = "YourRedisPassword123!"
-    shard_count    = 1
-    security_ips   = ["192.168.0.0/16"]
-    vswitch_key    = "redis_vswitch"
+    password = "YourRedisPassword123!"
+    # engine_version, instance_class, shard_count, db_instance_name, security_ips, and vswitch_key use defaults
   }
 
   rocketmq_account_config = {
@@ -73,8 +67,7 @@ module "monitoring_solution" {
 
 ## 示例
 
-* [完整示例](https://github.com/alibabacloud-automation/terraform-alicloud-comprehensive-monitoring/tree/main/examples/complete)
-* [基础示例](https://github.com/alibabacloud-automation/terraform-alicloud-comprehensive-monitoring/tree/main/examples/basic)
+* [完整示例](https://github.com/alibabacloud-automation/terraform-alicloud-prometheus-cloud-monitoring/tree/main/examples/complete)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
